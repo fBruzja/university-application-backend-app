@@ -6,12 +6,21 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    public User(Integer userId, String firstName, String lastName, String email, String password) {
+
+    private String major;
+
+    private String minor;
+
+    private String[] courses;
+
+    public User(Integer userId, String firstName, String lastName, String email, String password, String major, String minor) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.major = major;
+        this.minor = minor;
     }
 
     public Integer getUserId() {
@@ -52,5 +61,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getMinor() {
+        return minor;
+    }
+
+    public void setMinor(String minor) {
+        this.minor = minor;
     }
 }

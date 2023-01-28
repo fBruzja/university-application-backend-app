@@ -2,14 +2,16 @@ package com.social.app.repository;
 
 import com.social.app.domain.User;
 import com.social.app.exception.UaAuthException;
+import com.social.app.exception.UaBadRequestException;
 
 public interface UserRepository {
 
-    Integer create(String firstName, String lastName, String email, String password) throws UaAuthException;
+    Integer create(String firstName, String lastName, String email, String password, String major, String minor) throws UaAuthException;
 
     User findByEmailAndPassword(String email, String password) throws UaAuthException;
 
     Integer getCountByEmail(String email);
 
     User findById(Integer userId);
+
 }
