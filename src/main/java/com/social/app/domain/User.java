@@ -13,6 +13,20 @@ public class User {
 
     private String[] courses;
 
+    private String profilePicture;
+
+    public User(Integer userId, String firstName, String lastName, String email, String password, String major, String minor, String[] courses, String profilePicture) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.major = major;
+        this.minor = minor;
+        this.courses = courses;
+        this.profilePicture = profilePicture;
+    }
+
     public User(Integer userId, String firstName, String lastName, String email, String password, String major, String minor) {
         this.userId = userId;
         this.firstName = firstName;
@@ -77,5 +91,21 @@ public class User {
 
     public void setMinor(String minor) {
         this.minor = minor;
+    }
+
+    public String[] getCourses() {
+        return courses;
+    }
+
+    public void setCourses(String[] courses) {
+        this.courses = courses;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

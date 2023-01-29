@@ -2,6 +2,7 @@ package com.social.app.resources;
 
 import com.social.app.Constants;
 import com.social.app.domain.User;
+import com.social.app.model.ProfilePicture;
 import com.social.app.services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -45,6 +46,15 @@ public class UserResource {
     public ResponseEntity<User> getUserById(@PathVariable("userId") Integer userId) {
         User user = userService.getUserById(userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PutMapping("/profile-picture/{userId}")
+    public ResponseEntity<Map<String, Boolean>> updateProfilePicture(@PathVariable("userId") Integer userId,
+                                                                     @RequestBody ProfilePicture profilePicture) {
+        userService.updateUserProfilePicture(profilePicture.getBase64Image(), userId);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     private Map<String, String> generateJWTToken(User user) {

@@ -2,6 +2,7 @@ package com.social.app.services;
 
 import com.social.app.domain.User;
 import com.social.app.exception.UaAuthException;
+import com.social.app.exception.UaBadRequestException;
 import com.social.app.exception.UaResourceNotFoundException;
 import com.social.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,4 +53,10 @@ public class UserServiceImpl implements UserService {
             throw new UaResourceNotFoundException("User not found!");
         }
     }
+
+    @Override
+    public void updateUserProfilePicture(String profilePicture, Integer userId) throws UaBadRequestException {
+        userRepository.updateProfilePicture(profilePicture, userId);
+    }
+
 }

@@ -11,12 +11,19 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class CourseRepositoryImpl implements CourseRepository{
+public class CourseRepositoryImpl implements CourseRepository {
 
     private static final String SQL_FIND_ALL = "SELECT * FROM UA_CATEGORIES";
-    private static final String SQL_FIND_BY_ID = "SELECT CATEGORY_ID, TITLE, DESCRIPTION, COURSE_TIME, LOCATION, ATTENDEES FROM UA_CATEGORIES WHERE CATEGORY_ID=?";
-    private static final String SQL_UPDATE_ATTENDEES = "UPDATE UA_CATEGORIES SET ATTENDEES = array_append(ATTENDEES, ?) WHERE CATEGORY_ID=?";
-    private static final String SQL_REMOVE_ATTENDEES = "UPDATE UA_CATEGORIES SET ATTENDEES = array_remove(ATTENDEES, ?) WHERE CATEGORY_ID=?";
+    private static final String SQL_FIND_BY_ID = "SELECT CATEGORY_ID, TITLE, DESCRIPTION, COURSE_TIME, LOCATION, " +
+            "ATTENDEES FROM UA_CATEGORIES WHERE CATEGORY_ID=?";
+    private static final String SQL_UPDATE_ATTENDEES = "UPDATE UA_CATEGORIES SET ATTENDEES = array_append(ATTENDEES, ?)" +
+            " WHERE CATEGORY_ID=?";
+    private static final String SQL_REMOVE_ATTENDEES = "UPDATE UA_CATEGORIES SET ATTENDEES = array_remove(ATTENDEES, ?)" +
+            " WHERE CATEGORY_ID=?";
+    private static final String SQL_REMOVE_COURSE_FROM_USER = "UPDATE UA_USERS SET COURSES = array_remove(COURSES, ?)" +
+            " WHERE USER_ID=?";
+    private static final String SQL_UPDATE_COURSES = "UPDATE UA_USERS SET COURSES = array_append(COURSES, ?)" +
+            " WHERE USER_ID=?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -38,7 +45,15 @@ public class CourseRepositoryImpl implements CourseRepository{
     @Override
     public void updateAttendees(Integer courseId, String attendee) throws UaBadRequestException {
         try {
+            /*
+                the @Transactional annotation used upwards in the service classes
+                allows us to do many operations on the database
+                with just one request since they are all wrapped inside just one transaction
+             */
+
             jdbcTemplate.update(SQL_UPDATE_ATTENDEES, attendee, courseId);
+            jdbcTemplate.update(SQL_UPDATE_COURSES, courseId.toString(), Integer.parseInt(attendee));
+
         } catch (Exception e) {
             throw new UaBadRequestException("Invalid request!");
         }
@@ -48,6 +63,7 @@ public class CourseRepositoryImpl implements CourseRepository{
     public void removeAttendees(Integer courseId, String attendee) throws UaBadRequestException {
         try {
             jdbcTemplate.update(SQL_REMOVE_ATTENDEES, attendee, courseId);
+            jdbcTemplate.update(SQL_REMOVE_COURSE_FROM_USER, courseId.toString(), Integer.parseInt(attendee));
         } catch (Exception e) {
             throw new UaBadRequestException("Invalid request!");
         }
@@ -58,5 +74,5 @@ public class CourseRepositoryImpl implements CourseRepository{
             rs.getString("DESCRIPTION"),
             rs.getString("COURSE_TIME"),
             rs.getString("LOCATION"),
-            (String[])rs.getArray("ATTENDEES").getArray()));
+            (String[]) rs.getArray("ATTENDEES").getArray()));
 }

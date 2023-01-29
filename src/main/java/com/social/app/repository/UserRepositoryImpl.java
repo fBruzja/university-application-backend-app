@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 
@@ -19,15 +20,18 @@ import java.sql.Statement;
 public class UserRepositoryImpl implements UserRepository {
 
     private static final String SQL_CREATE = "INSERT INTO UA_USERS(USER_ID, FIRST_NAME, LAST_NAME, EMAIL," +
-            " PASSWORD, MAJOR, MINOR) VALUES(NEXTVAL('UA_USERS_SEQ'), ?, ?, ?, ?, ?, ?)";
+            " PASSWORD, MAJOR, MINOR, COURSES, PROFILE_PICTURE) VALUES(NEXTVAL('UA_USERS_SEQ'), ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String SQL_COUNT_BY_EMAIL = "SELECT COUNT(*) FROM UA_USERS WHERE EMAIL = ?";
 
-    private static final String SQL_FIND_BY_EMAIL = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, MAJOR, MINOR, COURSES " +
+    private static final String SQL_FIND_BY_EMAIL = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, MAJOR, MINOR, COURSES, PROFILE_PICTURE " +
             "FROM UA_USERS WHERE EMAIL = ?";
 
-    private static final String SQL_FIND_BY_ID = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, MAJOR, MINOR, COURSES " +
+    private static final String SQL_FIND_BY_ID = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, MAJOR, MINOR, COURSES, PROFILE_PICTURE " +
             "FROM UA_USERS WHERE USER_ID = ?";
+
+    private static final String SQL_UPDATE_PROFILE_PICTURE = "UPDATE UA_USERS SET PROFILE_PICTURE = ? " +
+            " WHERE USER_ID=?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -35,10 +39,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Integer create(String firstName, String lastName, String email, String password, String major, String minor) throws UaAuthException {
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(10));
-
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(con -> {
+                Array emptyArray = con.createArrayOf("text", new Object[]{});
                 PreparedStatement ps = con.prepareStatement(SQL_CREATE, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, firstName);
                 ps.setString(2, lastName);
@@ -46,6 +50,8 @@ public class UserRepositoryImpl implements UserRepository {
                 ps.setString(4, hashedPassword);
                 ps.setString(5, major);
                 ps.setString(6, minor);
+                ps.setArray(7, emptyArray);
+                ps.setString(8, "");
 
                 return ps;
             }, keyHolder);
@@ -77,7 +83,28 @@ public class UserRepositoryImpl implements UserRepository {
         return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, new Object[]{userId}, userRowMapper);
     }
 
+    @Override
+    public void updateProfilePicture(String profilePicture, Integer userId) throws UaBadRequestException {
+        try {
+            jdbcTemplate.update(SQL_UPDATE_PROFILE_PICTURE, profilePicture, userId);
+        } catch (Exception e) {
+            throw new UaBadRequestException("Invalid Request!");
+        }
+    }
+
     private RowMapper<User> userRowMapper = ((rs, rowNum) -> new User(
+            rs.getInt("USER_ID"),
+            rs.getString("FIRST_NAME"),
+            rs.getString("LAST_NAME"),
+            rs.getString("EMAIL"),
+            rs.getString("PASSWORD"),
+            rs.getString("MAJOR"),
+            rs.getString("MINOR"),
+            (String[]) rs.getArray("COURSES").getArray(),
+            rs.getString("PROFILE_PICTURE"))
+    );
+
+    private RowMapper<User> userRowMapperSignUp = ((rs, rowNum) -> new User(
             rs.getInt("USER_ID"),
             rs.getString("FIRST_NAME"),
             rs.getString("LAST_NAME"),

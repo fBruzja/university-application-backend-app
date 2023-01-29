@@ -14,4 +14,6 @@ public interface UserRepository {
 
     User findById(Integer userId);
 
+    void updateProfilePicture(String profilePicture, Integer userId) throws UaBadRequestException;
+
 }
