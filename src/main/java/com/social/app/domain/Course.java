@@ -1,6 +1,15 @@
 package com.social.app.domain;
 
 public class Course {
+    public Course(int categoryId, String title) {
+        this.categoryId = categoryId;
+        this.title = title;
+    }
+
+    public Course() {
+
+    }
+
     public Integer getCategoryId() {
         return categoryId;
     }

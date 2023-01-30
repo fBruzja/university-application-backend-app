@@ -18,6 +18,7 @@ public class AppApplication {
 		FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
 		AuthFilter authFilter = new AuthFilter();
 		registrationBean.setFilter(authFilter);
+		// TODO: Update urls
 		registrationBean.addUrlPatterns("/api/categories/*");
 		return registrationBean;
 	}

@@ -3,6 +3,7 @@ package com.social.app.resources;
 import com.social.app.Constants;
 import com.social.app.domain.User;
 import com.social.app.model.ProfilePicture;
+import com.social.app.model.UserSettings;
 import com.social.app.services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -57,7 +58,16 @@ public class UserResource {
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
-    private Map<String, String> generateJWTToken(User user) {
+    @PutMapping("/settings/{userId}")
+    public ResponseEntity<Map<String, Boolean>> updateUserSettings(@PathVariable("userId") Integer userId,
+                                                                     @RequestBody UserSettings userSettings) {
+        userService.updateUserSettings(userSettings.getNotifications(), userId);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    Map<String, String> generateJWTToken(User user) {
         long timestamp = System.currentTimeMillis();
         String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.API_SECRET_KEY)
                 .setIssuedAt(new Date(timestamp))

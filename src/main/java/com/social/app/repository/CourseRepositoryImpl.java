@@ -13,16 +13,16 @@ import java.util.List;
 @Repository
 public class CourseRepositoryImpl implements CourseRepository {
 
-    private static final String SQL_FIND_ALL = "SELECT * FROM UA_CATEGORIES";
-    private static final String SQL_FIND_BY_ID = "SELECT CATEGORY_ID, TITLE, DESCRIPTION, COURSE_TIME, LOCATION, " +
+    public static final String SQL_FIND_ALL = "SELECT * FROM UA_CATEGORIES";
+    public static final String SQL_FIND_BY_ID = "SELECT CATEGORY_ID, TITLE, DESCRIPTION, COURSE_TIME, LOCATION, " +
             "ATTENDEES FROM UA_CATEGORIES WHERE CATEGORY_ID=?";
-    private static final String SQL_UPDATE_ATTENDEES = "UPDATE UA_CATEGORIES SET ATTENDEES = array_append(ATTENDEES, ?)" +
+    public static final String SQL_UPDATE_ATTENDEES = "UPDATE UA_CATEGORIES SET ATTENDEES = array_append(ATTENDEES, ?)" +
             " WHERE CATEGORY_ID=?";
-    private static final String SQL_REMOVE_ATTENDEES = "UPDATE UA_CATEGORIES SET ATTENDEES = array_remove(ATTENDEES, ?)" +
+    public static final String SQL_REMOVE_ATTENDEES = "UPDATE UA_CATEGORIES SET ATTENDEES = array_remove(ATTENDEES, ?)" +
             " WHERE CATEGORY_ID=?";
-    private static final String SQL_REMOVE_COURSE_FROM_USER = "UPDATE UA_USERS SET COURSES = array_remove(COURSES, ?)" +
+    public static final String SQL_REMOVE_COURSE_FROM_USER = "UPDATE UA_USERS SET COURSES = array_remove(COURSES, ?)" +
             " WHERE USER_ID=?";
-    private static final String SQL_UPDATE_COURSES = "UPDATE UA_USERS SET COURSES = array_append(COURSES, ?)" +
+    public static final String SQL_UPDATE_COURSES = "UPDATE UA_USERS SET COURSES = array_append(COURSES, ?)" +
             " WHERE USER_ID=?";
 
     @Autowired

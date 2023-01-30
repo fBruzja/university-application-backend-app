@@ -20,17 +20,19 @@ import java.sql.Statement;
 public class UserRepositoryImpl implements UserRepository {
 
     private static final String SQL_CREATE = "INSERT INTO UA_USERS(USER_ID, FIRST_NAME, LAST_NAME, EMAIL," +
-            " PASSWORD, MAJOR, MINOR, COURSES, PROFILE_PICTURE) VALUES(NEXTVAL('UA_USERS_SEQ'), ?, ?, ?, ?, ?, ?, ?, ?)";
+            " PASSWORD, MAJOR, MINOR, COURSES, PROFILE_PICTURE, NOTIFICATIONS) VALUES(NEXTVAL('UA_USERS_SEQ'), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String SQL_COUNT_BY_EMAIL = "SELECT COUNT(*) FROM UA_USERS WHERE EMAIL = ?";
 
-    private static final String SQL_FIND_BY_EMAIL = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, MAJOR, MINOR, COURSES, PROFILE_PICTURE " +
+    private static final String SQL_FIND_BY_EMAIL = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, MAJOR, MINOR, COURSES, PROFILE_PICTURE, NOTIFICATIONS " +
             "FROM UA_USERS WHERE EMAIL = ?";
 
-    private static final String SQL_FIND_BY_ID = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, MAJOR, MINOR, COURSES, PROFILE_PICTURE " +
+    private static final String SQL_FIND_BY_ID = "SELECT USER_ID, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, MAJOR, MINOR, COURSES, PROFILE_PICTURE, NOTIFICATIONS " +
             "FROM UA_USERS WHERE USER_ID = ?";
 
     private static final String SQL_UPDATE_PROFILE_PICTURE = "UPDATE UA_USERS SET PROFILE_PICTURE = ? " +
+            " WHERE USER_ID=?";
+    private static final String SQL_UPDATE_USER_SETTINGS = "UPDATE UA_USERS SET NOTIFICATIONS = ? " +
             " WHERE USER_ID=?";
 
     @Autowired
@@ -52,6 +54,7 @@ public class UserRepositoryImpl implements UserRepository {
                 ps.setString(6, minor);
                 ps.setArray(7, emptyArray);
                 ps.setString(8, "");
+                ps.setBoolean(9, false);
 
                 return ps;
             }, keyHolder);
@@ -92,6 +95,15 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public void updateUserSettings(Boolean notifications, Integer userId) throws UaBadRequestException {
+        try {
+            jdbcTemplate.update(SQL_UPDATE_USER_SETTINGS, notifications, userId);
+        } catch (Exception e) {
+            throw new UaBadRequestException("Invalid request!");
+        }
+    }
+
     private RowMapper<User> userRowMapper = ((rs, rowNum) -> new User(
             rs.getInt("USER_ID"),
             rs.getString("FIRST_NAME"),
@@ -101,16 +113,7 @@ public class UserRepositoryImpl implements UserRepository {
             rs.getString("MAJOR"),
             rs.getString("MINOR"),
             (String[]) rs.getArray("COURSES").getArray(),
-            rs.getString("PROFILE_PICTURE"))
-    );
-
-    private RowMapper<User> userRowMapperSignUp = ((rs, rowNum) -> new User(
-            rs.getInt("USER_ID"),
-            rs.getString("FIRST_NAME"),
-            rs.getString("LAST_NAME"),
-            rs.getString("EMAIL"),
-            rs.getString("PASSWORD"),
-            rs.getString("MAJOR"),
-            rs.getString("MINOR"))
+            rs.getString("PROFILE_PICTURE"),
+            rs.getBoolean("NOTIFICATIONS"))
     );
 }

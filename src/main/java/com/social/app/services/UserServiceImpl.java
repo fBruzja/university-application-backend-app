@@ -59,4 +59,9 @@ public class UserServiceImpl implements UserService {
         userRepository.updateProfilePicture(profilePicture, userId);
     }
 
+    @Override
+    public void updateUserSettings(Boolean notifications, Integer userId) throws UaBadRequestException {
+        userRepository.updateUserSettings(notifications, userId);
+    }
+
 }
