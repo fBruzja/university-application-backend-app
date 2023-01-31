@@ -10,7 +10,7 @@ public interface CommentService {
 
     List<Comment> findCommentsByCourseId(Integer courseId) throws UaResourceNotFoundException;
 
-    Integer create(String content, String author, Integer course, Integer likes) throws UaBadRequestException;
+    Integer create(String content, String author, String course, Integer likes) throws UaBadRequestException;
 
     void likeComment(Integer userId, Integer commentId) throws UaBadRequestException;
 

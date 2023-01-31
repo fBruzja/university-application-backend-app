@@ -19,8 +19,8 @@ import java.util.List;
 public class CommentRepositoryImpl implements CommentRepository {
 
     private static final String SQL_FIND_COMMENTS_BY_COURSE_ID = "SELECT * FROM UA_COMMENTS WHERE COURSE=?";
-    private static final String SQL_CREATE_COMMENT = "INSERT INTO UA_COMMENTS(ID, CONTENT, AUTHOR, LIKES, COURSE) " +
-            "VALUES(NEXTVAL('UA_COMMENTS_SEQ'), ?, ?, ?, ?)";
+    private static final String SQL_CREATE_COMMENT = "INSERT INTO UA_COMMENTS(ID, CONTENT, AUTHOR, LIKES, COURSE, LIKEDBY) " +
+            "VALUES(NEXTVAL('UA_COMMENTS_SEQ'), ?, ?, ?, ?, ?)";
     private static final String SQL_LIKE_COMMENT = "UPDATE UA_COMMENTS SET LIKES = LIKES + 1 WHERE ID=?";
     private static final String SQL_UPDATE_LIKED_BY_COMMENT = "UPDATE UA_COMMENTS SET LIKEDBY=array_append(LIKEDBY, ?)" +
             " WHERE ID=?";
@@ -38,7 +38,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public Integer create(String content, String author, Integer course, Integer likes) throws UaBadRequestException {
+    public Integer create(String content, String author, String course, Integer likes) throws UaBadRequestException {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(con -> {
@@ -46,8 +46,9 @@ public class CommentRepositoryImpl implements CommentRepository {
                 PreparedStatement ps = con.prepareStatement(SQL_CREATE_COMMENT, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, content);
                 ps.setString(2, author);
-                ps.setInt(3, course);
-                ps.setArray(4, emptyArray);
+                ps.setInt(3, likes);
+                ps.setInt(4, Integer.parseInt(course));
+                ps.setArray(5, emptyArray);
 
                 return ps;
             }, keyHolder);
@@ -71,7 +72,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     private RowMapper<Comment> commentRowMapper = ((rs, rowNum) -> new Comment(rs.getInt("ID"),
             rs.getString("CONTENT"),
             rs.getString("AUTHOR"),
-            rs.getInt("LIKES"),
             rs.getInt("COURSE"),
+            rs.getInt("LIKES"),
             (Integer[]) rs.getArray("LIKEDBY").getArray()));
 }

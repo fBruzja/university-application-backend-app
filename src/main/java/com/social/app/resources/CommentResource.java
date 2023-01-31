@@ -28,10 +28,10 @@ public class CommentResource {
     public ResponseEntity<Integer> createComment(@RequestBody Map<String, Object> commentMap) {
         String content = (String) commentMap.get("content");
         String author = (String) commentMap.get("author");
+        String course = (String) commentMap.get("course");
         Integer likes = (Integer) commentMap.get("likes");
-        Integer course = (Integer) commentMap.get("course");
 
-        Integer comment = commentService.create(content, author, likes, course);
+        Integer comment = commentService.create(content, author,course, likes);
 
         return new ResponseEntity<>(comment, HttpStatus.OK);
     }

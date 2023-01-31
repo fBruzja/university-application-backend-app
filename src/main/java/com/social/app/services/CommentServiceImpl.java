@@ -23,7 +23,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Integer create(String content, String author, Integer course, Integer likes) throws UaBadRequestException {
+    public Integer create(String content, String author, String course, Integer likes) throws UaBadRequestException {
         return commentRepository.create(content, author, course, likes);
     }
 
