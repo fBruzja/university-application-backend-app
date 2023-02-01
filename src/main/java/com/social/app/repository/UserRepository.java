@@ -17,4 +17,8 @@ public interface UserRepository {
     void updateProfilePicture(String profilePicture, Integer userId) throws UaBadRequestException;
 
     void updateUserSettings(Boolean notifications, Integer userId) throws UaBadRequestException;
+
+    void addFriend(Integer userId, Integer friendId) throws UaBadRequestException;
+
+    void removeFriend(Integer userId, Integer friendId) throws UaBadRequestException;
 }

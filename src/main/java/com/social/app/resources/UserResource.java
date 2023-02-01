@@ -67,6 +67,24 @@ public class UserResource {
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
+    @PutMapping("/add-friend/{userId}/{friendId}")
+    public ResponseEntity<Map<String, Boolean>> addFriend(@PathVariable("userId") Integer userId,
+                                                          @PathVariable("friendId") Integer friendId) {
+        userService.addFriend(userId, friendId);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    @PutMapping("/remove-friend/{userId}/{friendId}")
+    public ResponseEntity<Map<String, Boolean>> removeFriend(@PathVariable("userId") Integer userId,
+                                                          @PathVariable("friendId") Integer friendId) {
+        userService.removeFriend(userId, friendId);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("success", true);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
     Map<String, String> generateJWTToken(User user) {
         long timestamp = System.currentTimeMillis();
         String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Constants.API_SECRET_KEY)

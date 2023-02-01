@@ -64,4 +64,14 @@ public class UserServiceImpl implements UserService {
         userRepository.updateUserSettings(notifications, userId);
     }
 
+    @Override
+    public void addFriend(Integer userId, Integer friendId) throws UaBadRequestException {
+        userRepository.addFriend(userId, friendId);
+    }
+
+    @Override
+    public void removeFriend(Integer userId, Integer friendId) throws UaBadRequestException {
+        userRepository.removeFriend(userId, friendId);
+    }
+
 }

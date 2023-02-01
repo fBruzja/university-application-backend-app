@@ -17,9 +17,11 @@ public class User {
 
     private Boolean notifications;
 
+    private Integer[] friends;
+
     public User() {}
 
-    public User(Integer userId, String firstName, String lastName, String email, String password, String major, String minor, String[] courses, String profilePicture, Boolean notifications) {
+    public User(Integer userId, String firstName, String lastName, String email, String password, String major, String minor, String[] courses, String profilePicture, Boolean notifications, Integer[] friends) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,9 +32,10 @@ public class User {
         this.courses = courses;
         this.profilePicture = profilePicture;
         this.notifications = notifications;
+        this.friends = friends;
     }
 
-    public User(Integer userId, String firstName, String lastName, String email, String password, String major, String minor, Boolean notifications) {
+    public User(Integer userId, String firstName, String lastName, String email, String password, String major, String minor, Boolean notifications, Integer[] friends) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -41,6 +44,7 @@ public class User {
         this.major = major;
         this.minor = minor;
         this.notifications = notifications;
+        this.friends = friends;
     }
 
     public Integer getUserId() {
@@ -121,5 +125,13 @@ public class User {
 
     public void setNotifications(Boolean notifications) {
         this.notifications = notifications;
+    }
+
+    public Integer[] getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Integer[] friends) {
+        this.friends = friends;
     }
 }

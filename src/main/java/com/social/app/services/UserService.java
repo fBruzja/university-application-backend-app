@@ -16,4 +16,8 @@ public interface UserService {
     void updateUserProfilePicture(String profilePicture, Integer userId) throws UaBadRequestException;
 
     void updateUserSettings(Boolean notifications, Integer userId) throws UaBadRequestException;
+
+    void addFriend(Integer userId, Integer friendId) throws UaBadRequestException;
+
+    void removeFriend(Integer userId, Integer friendId) throws UaBadRequestException;
 }
