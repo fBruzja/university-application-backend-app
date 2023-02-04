@@ -6,10 +6,10 @@ public class Friendship {
     private String friendshipId;
     private Integer userId;
     private Integer friendId;
-    private NotificationState notificationState;
+    private String notificationState;
     private Boolean notified;
 
-    public Friendship(String friendshipId, Integer userId, Integer friendId, NotificationState notificationState, Boolean notified) {
+    public Friendship(String friendshipId, Integer userId, Integer friendId, String notificationState, Boolean notified) {
         this.friendshipId = friendshipId;
         this.userId = userId;
         this.friendId = friendId;
@@ -41,11 +41,11 @@ public class Friendship {
         this.friendId = friendId;
     }
 
-    public NotificationState getNotificationState() {
+    public String getNotificationState() {
         return notificationState;
     }
 
-    public void setNotificationState(NotificationState notificationState) {
+    public void setNotificationState(String notificationState) {
         this.notificationState = notificationState;
     }
 

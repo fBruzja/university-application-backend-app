@@ -44,8 +44,8 @@ class CommentServiceImplTest {
 
     @Test
     void testCreate() throws UaBadRequestException {
-        when(commentRepository.create("Hello", "John", 1, 10)).thenReturn(1);
-        Integer commentId = commentService.create("Hello", "John", 1, 10);
+        when(commentRepository.create("Hello", "John", "1", 10)).thenReturn(1);
+        Integer commentId = commentService.create("Hello", "John", "1", 10);
         assertThat(commentId).isEqualTo(1);
     }
 

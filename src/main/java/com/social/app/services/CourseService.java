@@ -3,6 +3,7 @@ package com.social.app.services;
 import com.social.app.domain.Course;
 import com.social.app.exception.UaBadRequestException;
 import com.social.app.exception.UaResourceNotFoundException;
+import com.social.app.model.NotificationState;
 
 import java.util.List;
 

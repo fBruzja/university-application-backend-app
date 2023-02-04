@@ -46,7 +46,7 @@ class CommentRepositoryImplTest {
         when(jdbcTemplate.update(any(PreparedStatementCreator.class), eq(keyHolder)))
                 .thenReturn(1);
 
-        assertThrows(UaBadRequestException.class, () -> commentRepository.create("Good course", "John", 1, 10));
+        assertThrows(UaBadRequestException.class, () -> commentRepository.create("Good course", "John", "1", 10));
     }
 
     private RowMapper<Comment> commentRowMapper = ((rs, rowNum) -> new Comment(rs.getInt("ID"),
