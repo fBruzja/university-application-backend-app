@@ -1,7 +1,5 @@
 package com.social.app.domain;
 
-import com.social.app.model.NotificationState;
-
 public class Friendship {
     private String friendshipId;
     private Integer userId;
@@ -16,6 +14,8 @@ public class Friendship {
         this.notificationState = notificationState;
         this.notified = notified;
     }
+
+    public Friendship() {}
 
     public String getFriendshipId() {
         return friendshipId;
